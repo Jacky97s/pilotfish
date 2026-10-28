@@ -74,7 +74,7 @@
       "category": "approval",
       "source_line": 17,
       "source_clause": "- Plan gate: main synthesizes one Plan. Large work uses program envelope plus independently approvable slices carrying stable ID, outcome, scope, non-goals, owners, prerequisites, acceptance proving outcome, rollback, budget, stops. Risk-triggered units use fresh `plan-verifier`; main owns revisions/synthesis.",
-      "ambient_line": "Main writes Plan.Large work:envelope+slices with ID/outcome/scope/non-goals/owners/prerequisites/proving acceptance/rollback/budget/stops.Risk uses fresh pilotfish:plan-verifier;main revises.",
+      "ambient_line": "Main writes Plan.Large work:envelope+slices with ID/outcome/scope/non-goals/owners/prerequisites/proving acceptance/rollback/budget/stops.Heavy risk uses fresh pilotfish:plan-verifier;main revises.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -90,7 +90,7 @@
       "category": "authority",
       "source_line": 19,
       "source_clause": "- Execution gate: approved contract fixes scope, exclusive ownership, constraints, done criteria, integration, verification. Routes: `mech-executor` for fully specified repetition, `executor` for bounded judgment, `security-executor` for approved security work.",
-      "ambient_line": "Execution requires approved scope/owner/constraints/done/integration/verification.Route repetition→pilotfish:mech-executor,judgment→pilotfish:executor,approved security→pilotfish:security-executor.",
+      "ambient_line": "Execution requires approved scope/owner/constraints/done/integration/verification.Main implements by default.pilotfish:executor/pilotfish:security-executor only for parallel or isolated slices;repetition→pilotfish:mech-executor.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -98,7 +98,7 @@
       "category": "verification",
       "source_line": 20,
       "source_clause": "- Verification gate: implementation/integration must be concrete enough to test. Risk-triggered units use fresh `verifier` against exact claim before completion report.",
-      "ambient_line": "Implementation/integration must be testable;risk gets fresh pilotfish:verifier on exact claim pre-completion.",
+      "ambient_line": "Implementation/integration must be testable;heavy risk gets fresh pilotfish:verifier on exact claim pre-completion.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -154,7 +154,7 @@
       "category": "dispatch",
       "source_line": 30,
       "source_clause": "- Direct main execution of qualifying mechanical work requires prior concrete blocker: evolving/coupled evidence, ownership/integration conflict, worker unavailable, or non-positive net benefit.",
-      "ambient_line": "Main does qualifying mechanical only after naming evolving/coupled evidence,ownership/integration conflict,unavailable worker,or non-positive net benefit.",
+      "ambient_line": "Main does mechanical work unless delegating nets benefit.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -202,7 +202,7 @@
       "category": "security",
       "source_line": 36,
       "source_clause": "- Security-sensitive work (authn/authz, credentials/secrets, identity/privacy, crypto, validation/hardening, vuln analysis) never uses general executors. Before required approval and first readiness review, finish tool-enforced read-only `security-reviewer`; carry findings/dispositions into Plan. After approval, send stable contract to `security-executor`. Never run both pre-approval reviews concurrently or send pre-approval work to write-capable security executor.",
-      "ambient_line": "Authn/authz,secrets,identity/privacy,crypto,validation/hardening,vulnerabilities never use general executors.Pre-approval:read-only pilotfish:security-reviewer+dispositions;post-approval:pilotfish:security-executor.Never overlap reviews/send pre-approval work to writers.",
+      "ambient_line": "Authn/authz,secrets,identity/privacy,crypto,validation/hardening,vulnerabilities never use general executors.Pre-approval:read-only pilotfish:security-reviewer+dispositions;post-approval:main.Never overlap reviews/send pre-approval work to writers.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -210,7 +210,7 @@
       "category": "security",
       "source_line": 37,
       "source_clause": "- Any independent-review trigger makes that unit risky: pre-approval `plan-verifier` and post-implementation `verifier` are mandatory Agent calls, with no extra opt-in. Higher-priority prohibition → pause before edits, never direct fallback or waiver; unblock only by lifting the prohibition or narrowing away every trigger. Bounded fail-soft exception applies only without listed risk. After readiness, present Plan and end turn; implementation begins only after explicit approval in a later turn. Plan readiness judges proposed acceptance check.",
-      "ambient_line": "Each risk trigger mandates pre-approval pilotfish:plan-verifier+post-implementation pilotfish:verifier,no extra opt-in.Higher-rule prohibition pauses pre-edit—no fallback/waiver—until lifted/risk removed.Present ready Plan/stop;later approval unlocks execution.",
+      "ambient_line": "Heavy risk(security,data/schema/migration,irreversible,release)mandates pre-approval pilotfish:plan-verifier+post-implementation pilotfish:verifier.Explicit review:fresh reviewer;else self-check.Higher-rule prohibition pauses pre-edit—no fallback/waiver—until lifted/risk removed.Present ready Plan/stop;later approval unlocks execution.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -234,7 +234,7 @@
       "category": "approval",
       "source_line": 40,
       "source_clause": "- Review program envelope before slices, then next executable slice only. Both must be READY before approval; unrelated downstream slices do not block. Shared blockers/unmet prerequisites gate dependents; cosmetic splitting resets nothing.",
-      "ambient_line": "Review envelope before next executable slice;both READY before approval.Unrelated later slices do not block;shared blockers/prerequisites do.Cosmetic splits reset nothing.",
+      "ambient_line": "Review envelope once;slice review only if it changes outcome/security/data contract;READY before approval.Unrelated later slices do not block;shared blockers/prerequisites do.Cosmetic splits reset nothing.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -242,7 +242,7 @@
       "category": "recovery",
       "source_line": 41,
       "source_clause": "- Per readiness unit: materially revise after valid `REVISE`, then use fresh reviewer. Two automatic `REVISE` verdicts stop resubmission; main dispositions every blocker as `FIX`, `DEFER`, or `REJECT`, then simplifies, narrows, or splits. Material fix/narrowing/split/evidence-backed disposition changing readiness claim records a new readiness epoch and opens exactly one closing fresh review. Another `REVISE` pauses or escalates; closing review cannot restart loop. Ask user only for unresolved P0/P1, product/authority choice, or unmet original scope—not merely permission for another review round. Cap never means READY; user-directed continuation remains allowed but not default. Never resubmit substantially unchanged Plan.",
-      "ambient_line": "After REVISE:material revision+fresh reviewer.After 2 automatic REVISEs disposition all blockers FIX/DEFER/REJECT;simplify/narrow/split.1 new epoch gets 1 closing review;REVISE pauses/escalates.Ask only unresolved P0/P1,authority/product choice,unmet scope.Cap≠READY;no unchanged retry.",
+      "ambient_line": "After REVISE:material revision+fresh reviewer.After 1 automatic REVISE disposition all blockers FIX/DEFER/REJECT;simplify/narrow/split.1 new epoch gets 1 closing review;REVISE pauses/escalates.Ask only unresolved P0/P1,authority/product choice,unmet scope.Cap≠READY;no unchanged retry.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
@@ -282,7 +282,7 @@
       "category": "recovery",
       "source_line": 49,
       "source_clause": "- Severity rules apply every verification run; AUTO/ASK mode selection applies only to likely-long autonomous work. Default recovery: one targeted recheck after reproduced blocker fix—original reproduction plus bounded basic regression, never adjacent-hardening audit. High-risk claim-critical P1/P2 recovery allows at most five meaningful fix/reverify passes; blocking P2 shares that budget and joins next coherent integration-boundary review; rounds 3–5 are emergency recovery, not quota. Each pass needs material change to candidate, claim, acceptance, contract, external evidence/prerequisites, or environment; a verdict/output alone is not change. Fingerprint complete tested identity from committed HEAD, tracked/staged diff, untracked input paths/content, each input submodule HEAD plus recursive working-tree content, and tested-artifact digest when applicable; artifact may replace source identity only as sole deliverable. Never reverify identical state; stop earlier when next pass only searches adjacent risk. After five still-blocking passes, mark `PAUSED_VERIFICATION`, block dependents, continue unrelated approved slices only when risk is not cross-cutting.",
-      "ambient_line": "Recovery=original repro+bounded regression,no adjacent audit.High-risk claim-critical P1/P2:≤5 passes;3–5 emergency;blocking P2 shares budget.Every next pass requires material Δ to candidate|claim|acceptance|contract|external evidence/prerequisites|environment;verdict/output alone≠Δ.Complete candidate ID=committed HEAD|tracked+staged diff|untracked input paths+content|each submodule HEAD+recursive worktree content|applicable tested-artifact digest;artifact digest replaces source iff explicit sole deliverable.Never repeat ID;stop early if next pass only seeks adjacent risk.5 blockers→PAUSED_VERIFICATION+blocked dependents;unrelated approved work iff non-cross-cutting risk.",
+      "ambient_line": "Recovery=original repro+bounded regression,no adjacent audit.Claim-critical P1/P2:≤3 passes;blocking P2 shares budget.Every next pass requires material Δ to candidate|claim|acceptance|contract|external evidence/prerequisites|environment;verdict/output alone≠Δ.Complete candidate ID=committed HEAD|tracked+staged diff|untracked input paths+content|each submodule HEAD+recursive worktree content|applicable tested-artifact digest;artifact digest replaces source iff explicit sole deliverable.Never repeat ID;stop early if next pass only seeks adjacent risk.3 blockers→PAUSED_VERIFICATION+blocked dependents;unrelated approved work iff non-cross-cutting risk.",
       "focused_test": "tests.test_plugin.PluginArtifactTests.test_policy_requirement_matrix"
     },
     {
